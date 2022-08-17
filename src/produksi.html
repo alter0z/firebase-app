@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finishing</title>
+    <title>Produksi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous" />
   </head>
   <body>
@@ -170,9 +170,11 @@
       const dbRef = ref(db);
 
       var isL1Load = false;
+      var isL2load = false;
 
       // produksi
       // L1
+      function getL1lux(){
       get(child(dbRef, 'data/Produksi/L1/'))
         .then((snapshot) => {
           // ref data
@@ -182,13 +184,16 @@
 
           if (snapshot.exists()) {
             let dataProduksiL1Status = snapshot.val().Status;
-            dataL1Lux = snapshot.val().Lux;
+            let dataL1Lux = snapshot.val().Lux;
             let dataL1Jam = snapshot.val().Jam;
 
             produksiL1Status.innerHTML = dataProduksiL1Status;
             produksiL1Lux.innerHTML = dataL1Lux;
             l1Jam.innerHTML = dataL1Jam;
 
+            if (dataL1Lux > 0) {
+             return dataL1Lux;
+            }
             if (dataL1Lux < 300) {
               produksiL1Lux.style.color = 'red';
             } else {
@@ -204,8 +209,10 @@
         });
 
       console.log(dataL1Lux + ' outside');
+      }
 
       // L2
+      let dataL2Lux = 0;
       get(child(dbRef, 'data/Produksi/L2/'))
         .then((snapshot) => {
           // ref data
@@ -235,6 +242,7 @@
           alert('status: ' + error);
           console.log(error);
         });
+        console.log(getL1lux());
 
       // chart
       const labels = ['L1', 'L2'];
@@ -243,7 +251,7 @@
         datasets: [
           {
             label: 'Produksi Dataset Status',
-            data: [dataL1Lux, dataL2Lux],
+            data: [299,300],
             backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)'],
             borderColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)'],
             borderWidth: 1,
