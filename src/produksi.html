@@ -124,7 +124,8 @@
           </table>
         </div>
         <div class="row">
-          <canvas id="produksi"></canvas>
+          <div class="col"><canvas id="L1"></canvas></div>
+          <div class="col"><canvas id="L2"></canvas></div>
         </div>
       </div>
     </div>
@@ -169,12 +170,9 @@
       // read data
       const dbRef = ref(db);
 
-      var isL1Load = false;
-      var isL2load = false;
-
       // produksi
       // L1
-      function getL1lux(){
+
       get(child(dbRef, 'data/Produksi/L1/'))
         .then((snapshot) => {
           // ref data
@@ -191,14 +189,40 @@
             produksiL1Lux.innerHTML = dataL1Lux;
             l1Jam.innerHTML = dataL1Jam;
 
-            if (dataL1Lux > 0) {
-             return dataL1Lux;
-            }
             if (dataL1Lux < 300) {
               produksiL1Lux.style.color = 'red';
             } else {
               produksiL1Lux.style.color = 'green';
             }
+
+            // chart
+            const labels = ['L1'];
+            const data = {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Produksi Dataset Status',
+                  data: [dataL1Lux],
+                  backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                  borderColor: ['rgb(255, 99, 132)'],
+                  borderWidth: 1,
+                },
+              ],
+            };
+
+            const config = {
+              type: 'bar',
+              data: data,
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            };
+
+            const myChart = new Chart(document.getElementById('L1'), config);
           } else {
             alert('no data found!');
           }
@@ -208,11 +232,7 @@
           console.log(error);
         });
 
-      console.log(dataL1Lux + ' outside');
-      }
-
       // L2
-      let dataL2Lux = 0;
       get(child(dbRef, 'data/Produksi/L2/'))
         .then((snapshot) => {
           // ref data
@@ -222,7 +242,7 @@
 
           if (snapshot.exists()) {
             let dataProduksiL2Status = snapshot.val().Status;
-            dataL2Lux = snapshot.val().Lux;
+            let dataL2Lux = snapshot.val().Lux;
             let dataL2Jam = snapshot.val().Jam;
 
             produksiL2Status.innerHTML = dataProduksiL2Status;
@@ -234,6 +254,35 @@
             } else {
               produksiL2Lux.style.color = 'green';
             }
+
+            // chart
+            const labels = ['L2'];
+            const data = {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Produksi Dataset Status',
+                  data: [dataL2Lux],
+                  backgroundColor: ['rgba(255, 159, 64, 0.2)'],
+                  borderColor: ['rgb(255, 159, 64)'],
+                  borderWidth: 1,
+                },
+              ],
+            };
+
+            const config = {
+              type: 'bar',
+              data: data,
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            };
+
+            const myChart = new Chart(document.getElementById('L2'), config);
           } else {
             alert('no data found!');
           }
@@ -242,36 +291,35 @@
           alert('status: ' + error);
           console.log(error);
         });
-        console.log(getL1lux());
 
-      // chart
-      const labels = ['L1', 'L2'];
-      const data = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Produksi Dataset Status',
-            data: [299,300],
-            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-            borderColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)'],
-            borderWidth: 1,
-          },
-        ],
-      };
+      //   // chart
+      // const labels = ['L1', 'L2'];
+      // const data = {
+      //   labels: labels,
+      //   datasets: [
+      //     {
+      //       label: 'Produksi Dataset Status',
+      //       data: [299, 300],
+      //       backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)'],
+      //       borderColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)'],
+      //       borderWidth: 1,
+      //     },
+      //   ],
+      // };
 
-      const config = {
-        type: 'bar',
-        data: data,
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      };
+      // const config = {
+      //   type: 'bar',
+      //   data: data,
+      //   options: {
+      //     scales: {
+      //       y: {
+      //         beginAtZero: true,
+      //       },
+      //     },
+      //   },
+      // };
 
-      const myChart = new Chart(document.getElementById('produksi'), config);
+      // const myChart = new Chart(document.getElementById('produksi'), config);
     </script>
   </body>
 </html>
