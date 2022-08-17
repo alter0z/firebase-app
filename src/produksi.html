@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finishing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous" />
+  </head>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="#" style="color: #2a9d8f">Monitoring System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Room</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- content -->
+    <div class="container">
+      <div class="container-fluid">
+        <!-- L1 -->
+        <div class="row">
+          <h3>L1</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Jam</th>
+                <th scope="col">Lux</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td><span id="l1-jam"></span></td>
+                <td><span id="l1-lux"></span></td>
+                <td><span id="l1-status"></span></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- L2 -->
+        <div class="row">
+          <h3>L2</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Jam</th>
+                <th scope="col">Lux</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td><span id="l2-jam"></span></td>
+                <td><span id="l2-lux"></span></td>
+                <td><span id="l2-status"></span></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <canvas id="produksi"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+    <!-- chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js';
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.9.1/firebase-analytics.js';
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // realtime database init
+      import { getDatabase, ref, set, get, child, update, remove } from 'https://www.gstatic.com/firebasejs/9.9.1/firebase-database.js';
+
+      // console.log('executed-top');
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: 'AIzaSyBwGfjCoDpjMxJlGLnsaDu0IKNI3EL7UOc',
+        authDomain: 'fir-app-fe392.firebaseapp.com',
+        databaseURL: 'https://fir-app-fe392-default-rtdb.firebaseio.com',
+        projectId: 'fir-app-fe392',
+        storageBucket: 'fir-app-fe392.appspot.com',
+        messagingSenderId: '496887774684',
+        appId: '1:496887774684:web:d49388e35d78198d2ce319',
+        measurementId: 'G-QCEK25DKDG',
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+
+      // Initialize Realtime Database and get a reference to the service
+      const db = getDatabase();
+
+      // read data
+      const dbRef = ref(db);
+
+      var isL1Load = false;
+
+      // produksi
+      // L1
+      get(child(dbRef, 'data/Produksi/L1/'))
+        .then((snapshot) => {
+          // ref data
+          var produksiL1Status = document.getElementById('l1-status');
+          var produksiL1Lux = document.getElementById('l1-lux');
+          var l1Jam = document.getElementById('l1-jam');
+
+          if (snapshot.exists()) {
+            let dataProduksiL1Status = snapshot.val().Status;
+            dataL1Lux = snapshot.val().Lux;
+            let dataL1Jam = snapshot.val().Jam;
+
+            produksiL1Status.innerHTML = dataProduksiL1Status;
+            produksiL1Lux.innerHTML = dataL1Lux;
+            l1Jam.innerHTML = dataL1Jam;
+
+            if (dataL1Lux < 300) {
+              produksiL1Lux.style.color = 'red';
+            } else {
+              produksiL1Lux.style.color = 'green';
+            }
+          } else {
+            alert('no data found!');
+          }
+        })
+        .catch((error) => {
+          alert('status: ' + error);
+          console.log(error);
+        });
+
+      console.log(dataL1Lux + ' outside');
+
+      // L2
+      get(child(dbRef, 'data/Produksi/L2/'))
+        .then((snapshot) => {
+          // ref data
+          var produksiL2Status = document.getElementById('l2-status');
+          var produksiL2Lux = document.getElementById('l2-lux');
+          var l2Jam = document.getElementById('l2-jam');
+
+          if (snapshot.exists()) {
+            let dataProduksiL2Status = snapshot.val().Status;
+            dataL2Lux = snapshot.val().Lux;
+            let dataL2Jam = snapshot.val().Jam;
+
+            produksiL2Status.innerHTML = dataProduksiL2Status;
+            produksiL2Lux.innerHTML = dataL2Lux;
+            l2Jam.innerHTML = dataL2Jam;
+
+            if (dataL2Lux < 300) {
+              produksiL2Lux.style.color = 'red';
+            } else {
+              produksiL2Lux.style.color = 'green';
+            }
+          } else {
+            alert('no data found!');
+          }
+        })
+        .catch((error) => {
+          alert('status: ' + error);
+          console.log(error);
+        });
+
+      // chart
+      const labels = ['L1', 'L2'];
+      const data = {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Produksi Dataset Status',
+            data: [dataL1Lux, dataL2Lux],
+            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)'],
+            borderColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)'],
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      const config = {
+        type: 'bar',
+        data: data,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      };
+
+      const myChart = new Chart(document.getElementById('produksi'), config);
+    </script>
+  </body>
+</html>
